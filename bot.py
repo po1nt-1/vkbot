@@ -66,7 +66,8 @@ def auth_pars(auth):
 
 def main():
     try:
-        with open(os.path.join(get_script_dir(), "sec.json"), 'r', encoding="utf-8") as f:
+        with open(os.path.join(get_script_dir(), "sec.json"), 'r',
+                  encoding="utf-8") as f:
             auth = json.load(f)
 
         token, group_id = auth_pars(auth)
