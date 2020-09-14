@@ -1,3 +1,8 @@
 sec.json
 __pycache__ 
+<<<<<<< HEAD
 control/
+=======
+control/input
+control/output
+>>>>>>> 709c662... change sec file
