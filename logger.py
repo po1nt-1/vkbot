@@ -59,10 +59,7 @@ def vk_to_json(bot_api, raw):
         for i in range(len(raw_att)):
             iraw = raw_att[i]
 
-            if iraw["type"] == "link":
-                att += f'{iraw["type"]}: {iraw["poll"]}, '
-            else:
-                att += f'{iraw["type"]}: ' + f'{iraw[iraw["type"]]}, '
+            att += f'{iraw["type"]}: ' + f'{iraw[iraw["type"]]}, '
 
         att = att[:-2]
 
