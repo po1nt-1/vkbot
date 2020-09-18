@@ -3,6 +3,8 @@ import os
 import sys
 from datetime import datetime
 
+from vk_api.utils import get_random_id
+
 from bot import report
 
 
@@ -33,18 +35,28 @@ def vk_to_json(bot_api, raw):
     data += f'text: {str(raw["text"])}\n'
 
     peer_id = int(raw["peer_id"])
+
     if peer_id == 200411727:
         peer_id = "me"
-    elif peer_id == 2000000001:
-        peer_id = "лаборатория"
-    elif peer_id == 2000000002:
-        peer_id = "Amatorria's people"
-    elif peer_id == 2000000003:
-        peer_id = "приличное название"
+    elif peer_id >= 2000000000:
+        m = f"unknown chat: '{peer_id}': \n"
+        try:
+            title = bot_api.messages.getConversationsById(
+                peer_ids=peer_id)["items"][0]["chat_settings"]["title"]
+            m += "group name: " + title
+            peer_id = title
+        except IndexError:
+            bot_api.messages.send(
+                random_id=get_random_id(),
+                peer_id=peer_id,
+                message="I need admin rights, please!"
+            )
 
+        report(bot_api, m)
     else:
-        m = f"unknown peer_id: {peer_id}: \n"
+        m = f"unknown user: '{peer_id}': \n"
         m += f"https://vk.com/id{peer_id}"
+
         report(bot_api, m)
 
     data += f'peer: {peer_id}\n'

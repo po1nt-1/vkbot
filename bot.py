@@ -1,7 +1,9 @@
 import inspect
 import json
 import os
+import random
 import sys
+import time
 import traceback
 from datetime import datetime
 
@@ -86,7 +88,23 @@ def main():
             print("ok")
 
             for event in longpoll.listen():
+                random.seed()
+
                 if event.type == VkBotEventType.MESSAGE_NEW:
+
+                    # test = bot_api.messages.getConversationsById(
+                    #     peer_ids=event.obj.peer_id)["items"][0]["chat_settings"]["title"]
+
+                    # test = bot_api.messages.getConversationMembers(
+                    #     peer_ids=event.obj.peer_id)
+
+                    # val = int(random.uniform(0, 100))
+                    # test = bot_api.messages.editChat(
+                    #     chat_id=event.obj.peer_id - 2000000000, title=f"#{val99}")
+
+                    # with open("test.json", "w", encoding="utf-8") as f:
+                    #     json.dump(test, f, indent=2, ensure_ascii=False)
+
                     last_message = logger.vk_to_json(bot_api, event)
 
                     if not os.path.exists(os.path.join(get_script_dir(),
@@ -106,6 +124,25 @@ def main():
         except requests.exceptions.ReadTimeout as e:
             print(e)
             print(traceback.format_exc())
+            continue
+        except requests.exceptions.ConnectionError:
+            print(e)
+            print(traceback.format_exc())
+
+            bot_api.messages.send(
+                random_id=get_random_id(),
+                peer_id=event.obj.peer_id,
+                message="The Internet connection is interrupted"
+            )
+
+            time.time(10000)
+            
+            bot_api.messages.send(
+                random_id=get_random_id(),
+                peer_id=event.obj.peer_id,
+                message="I'm trying to restart.."
+            )
+
             continue
         except Exception as e:
             value = datetime.fromtimestamp(event.obj["date"] + 25200)
