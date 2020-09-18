@@ -44,7 +44,6 @@ def vk_to_json(bot_api, raw):
 
     else:
         m = f"unknown peer_id: {peer_id}: \n"
-        m += f"https://vk.com/club{peer_id} or\n"
         m += f"https://vk.com/id{peer_id}"
         report(bot_api, m)
 
