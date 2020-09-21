@@ -32,14 +32,6 @@ def get_script_dir(follow_symlinks: bool = True) -> str:
     return os.path.dirname(path)
 
 
-def report(bot_api, m):
-    bot_api.messages.send(
-        random_id=get_random_id(),
-        peer_id=200411727,
-        message=m
-    )
-
-
 def fast_input(event, bot_api):
     if not os.path.exists(os.path.join(get_script_dir(), "control", "input")):
         with open(os.path.join(get_script_dir(), "control", "input"), 'w',
@@ -55,11 +47,7 @@ def fast_input(event, bot_api):
         f.write("")
 
     if len(text) > 0 and not text.isspace():
-        bot_api.messages.send(
-            random_id=get_random_id(),
-            peer_id=event.obj.peer_id,
-            message=text
-        )
+        logger.send_m(bot_api, event.obj.peer_id, text)
 
 
 def auth_pars(auth):
@@ -129,19 +117,13 @@ def main():
             print(e)
             print(traceback.format_exc())
 
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=event.obj.peer_id,
-                message="The Internet connection is interrupted"
-            )
+            logger.send_m(bot_api, event.obj.peer_id,
+                          "The Internet connection is interrupted")
 
-            time.time(10000)
-            
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=event.obj.peer_id,
-                message="I'm trying to restart.."
-            )
+            time.sleep(10)
+
+            logger.send_m(bot_api, event.obj.peer_id,
+                          "I'm trying to restart..")
 
             continue
         except Exception as e:
@@ -157,7 +139,7 @@ def main():
             error = f"{traceback.format_exc()}\n" + \
                 f"Stopped with: {e} \nin {str(date)}"
 
-            report(bot_api, error)
+            logger.send_m(bot_api, 200411727, error)
 
             raise my_err(error)
 

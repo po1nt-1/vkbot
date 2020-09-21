@@ -6,6 +6,8 @@ import sys
 
 from vk_api.utils import get_random_id
 
+import logger
+
 
 def get_script_dir(follow_symlinks: bool = True) -> str:
     # https://clck.ru/P8NUA
@@ -52,11 +54,7 @@ def hellbye(bot_api, event):
             elif random.choice(seq):
                 a_hell += " :("
 
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=event.obj.peer_id,
-                message=a_hell
-            )
+            logger.send_m(bot_api, event.obj.peer_id, a_hell)
             flag = True
             break
 
@@ -73,11 +71,7 @@ def hellbye(bot_api, event):
                 elif random.choice(seq):
                     a_bye += " :("
 
-                bot_api.messages.send(
-                    random_id=get_random_id(),
-                    peer_id=event.obj.peer_id,
-                    message=a_bye
-                )
+                logger.send_m(bot_api, event.obj.peer_id, a_bye)
                 break
 
     for elem in dictionary["q_hows"]:
@@ -92,18 +86,10 @@ def hellbye(bot_api, event):
             elif random.choice(seq):
                 a_how += " :("
 
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=event.obj.peer_id,
-                message=a_how
-            )
+            logger.send_m(bot_api, event.obj.peer_id, a_how)
             break
 
     for elem in dictionary["q_ip"]:
         if elem in response:
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=event.obj.peer_id,
-                message=dictionary["a_ip"]
-            )
+            logger.send_m(bot_api, event.obj.peer_id, dictionary["a_ip"])
             break

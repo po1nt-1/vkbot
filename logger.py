@@ -1,11 +1,18 @@
 import inspect
 import os
 import sys
+import traceback
 from datetime import datetime
 
+import vk_api
 from vk_api.utils import get_random_id
 
-from bot import report
+
+KNOWN_CHATS = [
+    2000000001,
+    2000000002,
+    2000000003
+]
 
 
 def get_script_dir(follow_symlinks: bool = True) -> str:
@@ -26,6 +33,29 @@ def set_error(e):
         f.write(data)
 
 
+def send_m(bot_api, id, m):
+    try:
+        bot_api.messages.send(
+            random_id=get_random_id(),
+            peer_id=id,
+            message=m
+        )
+    except vk_api.exceptions.ApiError as e:
+        error = f"{traceback.format_exc()}\n" + \
+            f"Stopped with: {e}"
+
+        set_error(error)
+
+        try:
+            bot_api.messages.send(
+                random_id=get_random_id(),
+                peer_id=200411727,
+                message=error
+            )
+        except vk_api.exceptions.ApiError:
+            pass
+
+
 def vk_to_json(bot_api, raw):
     raw = raw.obj
 
@@ -38,7 +68,7 @@ def vk_to_json(bot_api, raw):
 
     if peer_id == 200411727:
         peer_id = "me"
-    elif peer_id >= 2000000000:
+    elif peer_id >= 2000000000 and not (peer_id in KNOWN_CHATS):
         m = f"unknown chat: '{peer_id}': \n"
         try:
             title = bot_api.messages.getConversationsById(
@@ -46,18 +76,14 @@ def vk_to_json(bot_api, raw):
             m += "group name: " + title
             peer_id = title
         except IndexError:
-            bot_api.messages.send(
-                random_id=get_random_id(),
-                peer_id=peer_id,
-                message="I need admin rights, please!"
-            )
+            send_m(bot_api, peer_id, "I need admin rights, please!")
 
-        report(bot_api, m)
-    else:
+        send_m(bot_api, 200411727, m)
+    elif peer_id < 2000000000:
         m = f"unknown user: '{peer_id}': \n"
         m += f"https://vk.com/id{peer_id}"
 
-        report(bot_api, m)
+        send_m(bot_api, 200411727, m)
 
     data += f'peer: {peer_id}\n'
 
