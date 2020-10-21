@@ -4,8 +4,6 @@ import os
 import random
 import sys
 
-from vk_api.utils import get_random_id
-
 import logger
 
 
