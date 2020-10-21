@@ -92,7 +92,6 @@ def vk_to_json(bot_api, raw):
 
         att = '{'
 
-        types = []
         for i in range(len(raw_att)):
             iraw = raw_att[i]
 
