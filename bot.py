@@ -147,7 +147,7 @@ if __name__ == "__main__":
         print("\tSTART")
         main()
     except KeyboardInterrupt:
-        sys.exit
+        sys.exit()
     except my_err as e:
         print(e)
     finally:
