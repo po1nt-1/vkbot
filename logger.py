@@ -3,10 +3,11 @@ import os
 import sys
 import traceback
 from datetime import datetime
+from io import BytesIO
 
+import requests
 import vk_api
 from vk_api.utils import get_random_id
-
 
 KNOWN_CHATS = [
     2000000001,
@@ -31,6 +32,40 @@ def set_error(e):
               encoding="utf-8") as f:
         data = str(e) + '\n' + '-' * 30 + '\n'
         f.write(data)
+
+
+def send_photo(bot_api, id, x):
+    try:
+        img = requests.get(f"https://this{x}doesnotexist.com/").content
+        f = BytesIO(img)
+
+        uploader = vk_api.upload.VkUpload(bot_api)
+        response = uploader.photo_messages(f)[0]
+
+        owner_id = response['owner_id']
+        photo_id = response['id']
+        access_key = response['access_key']
+
+        bot_api.messages.send(
+            random_id=get_random_id(),
+            peer_id=id,
+            attachment=f'photo{owner_id}_{photo_id}_{access_key}'
+        )
+
+    except vk_api.exceptions.ApiError as e:
+        error = f"{traceback.format_exc()}\n" + \
+            f"Stopped with: {e}"
+
+        set_error(error)
+
+        try:
+            bot_api.messages.send(
+                random_id=get_random_id(),
+                peer_id=200411727,
+                message=error
+            )
+        except vk_api.exceptions.ApiError:
+            pass
 
 
 def send_m(bot_api, id, m):

@@ -1,5 +1,6 @@
 import inspect
 import json
+import multiprocessing as mp
 import os
 import random
 import sys
@@ -85,10 +86,9 @@ def main():
     while True:
         try:
             print("ok")
+            start_time = time.time()
 
             for event in longpoll.listen():
-                random.seed()
-
                 if event.type == VkBotEventType.MESSAGE_NEW:
 
                     # test = bot_api.messages.getConversationsById(
@@ -119,6 +119,15 @@ def main():
                         fast_input(event=event, bot_api=bot_api)
 
                         dialog.hellbye(bot_api, event)
+
+                        if time.time() - start_time > 300:
+                            start_time = time.time()
+                            bot_session = vk_api.VkApi(token=token)
+
+                            mp_bot_api = bot_session.get_api()
+
+                            logger.send_photo(
+                                mp_bot_api, event.obj.peer_id, 'cat')
 
         except requests.exceptions.ReadTimeout as e:
             print(e)
