@@ -57,17 +57,30 @@ def main():
     try:
         with open(os.path.join(get_script_dir(), "sec.json"), 'r',
                   encoding="utf-8") as f:
-            auth = json.load(f)
+            VK_BOT_KEY = json.load(f)
 
-        token, group_id = auth_pars(auth)
+        token, group_id = auth_pars(VK_BOT_KEY)
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        VK_BOT_KEY = input("?: ")
+        try:
+            token, group_id = auth_pars(VK_BOT_KEY)
+        except Exception:
+            os.remove(os.path.join(get_script_dir(), "sec.json"))
+            print("BAD VK_BOT_KEY")
 
-    except FileNotFoundError:
-        token, group_id = auth_pars(input("?: "))
+    try:
+        bot_session = vk_api.VkApi(token=token)
 
-    bot_session = vk_api.VkApi(token=token)
+        bot_api = bot_session.get_api()
+        longpoll = vk_api.bot_longpoll.VkBotLongPoll(bot_session, group_id)
+    except Exception:
+        os.remove(os.path.join(get_script_dir(), "sec.json"))
+        print("BAD VK_BOT_KEY")
+        return
 
-    bot_api = bot_session.get_api()
-    longpoll = vk_api.bot_longpoll.VkBotLongPoll(bot_session, group_id)
+    with open(os.path.join(get_script_dir(), "sec.json"), 'w',
+              encoding="utf-8") as f:
+        json.dump(VK_BOT_KEY, f)
 
     while True:
         try:
