@@ -74,6 +74,9 @@ def main():
 
         bot_api = bot_session.get_api()
         longpoll = vk_api.bot_longpoll.VkBotLongPoll(bot_session, group_id)
+
+        bot_session = vk_api.VkApi(token=token)
+        mp_bot_api = bot_session.get_api()
     except Exception:
         os.remove(os.path.join(get_script_dir(), "sec.json"))
         print("BAD VK_BOT_KEY")
@@ -120,11 +123,8 @@ def main():
 
                         dialog.hellbye(bot_api, event)
 
-                        if time.time() - start_time > 300:
+                        if time.time() - start_time > 1800:
                             start_time = time.time()
-                            bot_session = vk_api.VkApi(token=token)
-
-                            mp_bot_api = bot_session.get_api()
 
                             logger.send_photo(
                                 mp_bot_api, event.obj.peer_id, 'cat')
