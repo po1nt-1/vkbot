@@ -93,7 +93,6 @@ def main():
 
             for event in longpoll.listen():
                 if event.type == VkBotEventType.MESSAGE_NEW:
-
                     # test = bot_api.messages.getConversationsById(
                     #     peer_ids=event.obj.peer_id)["items"][0]["chat_settings"]["title"]
 
@@ -123,17 +122,11 @@ def main():
 
                         dialog.hellbye(bot_api, event)
 
-                        if time.time() - start_time > 10800:
-                            start_time = time.time()
-
-                            logger.send_photo(
-                                mp_bot_api, event.obj.peer_id, 'cat')
-
         except requests.exceptions.ReadTimeout as e:
             print(e)
             print(traceback.format_exc())
             continue
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             print(e)
             print(traceback.format_exc())
 

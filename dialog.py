@@ -91,3 +91,6 @@ def hellbye(bot_api, event):
         if elem in response:
             logger.send_m(bot_api, event.obj.peer_id, dictionary["a_ip"])
             break
+
+    if "мя" in response or "meo" in response or "мау" in response:
+        logger.send_photo(bot_api, event.obj.peer_id, 'cat')
