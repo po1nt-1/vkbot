@@ -123,7 +123,7 @@ def main():
 
                         dialog.hellbye(bot_api, event)
 
-                        if time.time() - start_time > 1800:
+                        if time.time() - start_time > 10800:
                             start_time = time.time()
 
                             logger.send_photo(
