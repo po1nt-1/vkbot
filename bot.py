@@ -99,9 +99,14 @@ def main():
                     # test = bot_api.messages.getConversationMembers(
                     #     peer_ids=event.obj.peer_id)
 
+                    # while True:
+                    #     logger.send_m(bot_api, event.obj.peer_id, u"5͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓͓̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏̏")
+
                     # val = int(random.uniform(0, 100))
                     # test = bot_api.messages.editChat(
-                    #     chat_id=event.obj.peer_id - 2000000000, title=f"#{val99}")
+                    #     chat_id=event.obj.peer_id - 2000000000, title=f"#{val}")
+                    # print(test)
+                    # time.sleep(0.7)
 
                     # with open("test.json", "w", encoding="utf-8") as f:
                     #     json.dump(test, f, indent=2, ensure_ascii=False)
@@ -130,12 +135,12 @@ def main():
             print(e)
             print(traceback.format_exc())
 
-            logger.send_m(bot_api, event.obj.peer_id,
+            logger.send_m(bot_api, 200411727,
                           "The Internet connection is interrupted")
 
             time.sleep(10)
 
-            logger.send_m(bot_api, event.obj.peer_id,
+            logger.send_m(bot_api, 200411727,
                           "I'm trying to restart..")
 
             continue
